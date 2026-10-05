@@ -15,13 +15,13 @@ jobs:
         include:
           - label: Mac (Apple Silicon)
             os: macos-14
-            artifact: PhotoResizer-Mac-AppleSilicon
+            artifact: SmartImageResizer-Mac-AppleSilicon
           - label: Mac (Intel)
             os: macos-15-intel
-            artifact: PhotoResizer-Mac-Intel
+            artifact: SmartImageResizer-Mac-Intel
           - label: Windows
             os: windows-latest
-            artifact: PhotoResizer-Windows
+            artifact: SmartImageResizer-Windows
 
     steps:
       - uses: actions/checkout@v7
@@ -39,24 +39,24 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           pyinstaller --noconfirm --clean --windowed \
-            --name "Photo Resizer" \
+            --name "Smart Image Resizer" \
             --icon icon.icns \
-            --osx-bundle-identifier com.elementsbyremedy.photoresizer \
+            --osx-bundle-identifier com.jacksonwilliams.smartimageresizer \
             --hidden-import PIL._tkinter_finder \
             photo_resizer.py
           ditto -c -k --sequesterRsrc --keepParent \
-            "dist/Photo Resizer.app" "${{ matrix.artifact }}.zip"
+            "dist/Smart Image Resizer.app" "${{ matrix.artifact }}.zip"
 
       - name: Build (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
           pyinstaller --noconfirm --clean --windowed --onefile `
-            --name "Photo Resizer" `
+            --name "Smart Image Resizer" `
             --icon icon.ico `
             --hidden-import PIL._tkinter_finder `
             photo_resizer.py
-          Compress-Archive -Path "dist/Photo Resizer.exe" -DestinationPath "${{ matrix.artifact }}.zip"
+          Compress-Archive -Path "dist/Smart Image Resizer.exe" -DestinationPath "${{ matrix.artifact }}.zip"
 
       - uses: actions/upload-artifact@v7
         with:
