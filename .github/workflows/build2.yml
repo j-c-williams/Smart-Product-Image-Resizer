@@ -1,0 +1,65 @@
+name: Build apps
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    name: ${{ matrix.label }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: Mac (Apple Silicon)
+            os: macos-14
+            artifact: SmartImageResizer-Mac-AppleSilicon
+          - label: Mac (Intel)
+            os: macos-15-intel
+            artifact: SmartImageResizer-Mac-Intel
+          - label: Windows
+            os: windows-latest
+            artifact: SmartImageResizer-Windows
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt pyinstaller
+
+      - name: Build (Mac)
+        if: runner.os == 'macOS'
+        run: |
+          pyinstaller --noconfirm --clean --windowed \
+            --name "Smart Image Resizer" \
+            --icon icon.icns \
+            --osx-bundle-identifier com.jacksonwilliams.smartimageresizer \
+            --hidden-import PIL._tkinter_finder \
+            photo_resizer.py
+          ditto -c -k --sequesterRsrc --keepParent \
+            "dist/Smart Image Resizer.app" "${{ matrix.artifact }}.zip"
+
+      - name: Build (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          pyinstaller --noconfirm --clean --windowed --onefile `
+            --name "Smart Image Resizer" `
+            --icon icon.ico `
+            --hidden-import PIL._tkinter_finder `
+            photo_resizer.py
+          Compress-Archive -Path "dist/Smart Image Resizer.exe" -DestinationPath "${{ matrix.artifact }}.zip"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.artifact }}
+          path: ${{ matrix.artifact }}.zip
+          if-no-files-found: error
