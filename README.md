@@ -1,4 +1,4 @@
-# Elements by Remedy — Photo Resizer
+# Jackson Williams - Smart Image Resizer
 
 Crops and resizes product photos to a chosen size (default 1087 × 1087 px),
 auto-centering on the product, with arrow-key fine-tuning.
@@ -31,7 +31,7 @@ protected your PC", click **More info → Run anyway** (one time).
    (Shift = faster, + / − = zoom), then press **Enter** to save and move on.
    "Save all remaining" skips the review step.
 
-## For whoever maintains this: building the apps
+## For Jackson/other devs: building the apps
 
 Mac apps can only be built on a Mac, so this repo builds everything in the
 cloud with GitHub Actions (free for public repos; private repos get a monthly

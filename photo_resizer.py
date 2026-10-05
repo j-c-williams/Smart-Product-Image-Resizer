@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Elements by Remedy - Photo Resizer
-----------------------------------
+Jackson Williams - Smart Image Resizer
+-------------------
 Crops and resizes product photos to a chosen size (default 1087 x 1087 px)
 with automatic subject centering and manual arrow-key adjustment.
 
@@ -20,8 +20,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageOps, ImageTk
 
 # ----------------------------------------------------------------- settings
-BRAND = "ELEMENTS BY REMEDY"
-APP_NAME = "Photo Resizer"
+APP_NAME = "Smart Image Resizer"
 DEFAULT_SIZE = (1087, 1087)
 MIN_DIM, MAX_DIM = 16, 20000
 EXTS = {".jpg", ".jpeg", ".png", ".tif", ".tiff", ".webp", ".bmp"}
@@ -358,7 +357,7 @@ class App:
         init_scaling(root)
         logical_h = root.winfo_screenheight() / SCALE
         self.box = px(min(PREVIEW_BOX, max(340, int(logical_h - 90 - 200))))
-        root.title(f"{APP_NAME} — Elements by Remedy")
+        root.title(f"{APP_NAME} — Jackson Williams")
         root.configure(bg=WHITE)
         root.resizable(False, False)
         self._init_fonts()
@@ -456,7 +455,6 @@ class App:
         inner.pack(fill="both", expand=True, padx=px(26), pady=(px(18), px(16)))
         tk.Frame(inner, width=px(290), height=1, bg=WHITE).pack()
 
-        self._label(inner, BRAND, self.f_label, ACCENT, anchor="w").pack(fill="x")
         self._label(inner, APP_NAME, self.f_title, INK, anchor="w").pack(fill="x")
 
         # folders
